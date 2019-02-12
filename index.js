@@ -37,6 +37,24 @@ server.post("/api/posts", (req, res) => {
     });
 });
 
+server.get("/api/posts/:id", (req, res) => {
+  db.findById(req.params.id)
+    .then(post => {
+      if (!post) {
+        res.status(404).json({
+          message: "The post with the specified ID does not exist."
+        });
+      } else {
+        res.status(200).json({ post });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({
+        error: "The post could not be removed"
+      });
+    });
+});
+
 server.listen(4000, () => {
   console.log("\n*** Server running on http://localhost:4000 ***\n");
 });
