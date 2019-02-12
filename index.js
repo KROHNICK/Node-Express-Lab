@@ -18,6 +18,25 @@ server.get("/api/posts", (req, res) => {
     });
 });
 
+server.post("/api/posts", (req, res) => {
+  const post = req.body;
+  db.insert(post)
+    .then(post => {
+      if (!post.title || !post.contents) {
+        return res.status(400).json({
+          errorMessage: "Please provide title and contents for the post."
+        });
+      } else {
+        res.status(201).json(post);
+      }
+    })
+    .catch(err => {
+      res.status(500).json({
+        error: "There was an error while saving the post to the database"
+      });
+    });
+});
+
 server.listen(4000, () => {
   console.log("\n*** Server running on http://localhost:4000 ***\n");
 });
